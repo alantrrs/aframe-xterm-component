@@ -15,8 +15,12 @@ AFRAME.registerComponent('xterm-example', {
 
     xterm.write(message)
 
-    const socket = new WebSocket('ws://localhost:8080/')
-
+    // Use the server's IP
+    const protocol = (location.protocol === 'https:') ? 'wss://' : 'ws://'
+    const port = location.port ? `:${location.port}` : ''
+    const socketUrl = `${protocol}${location.hostname}${port}/`
+    const socket = new WebSocket(socketUrl)  
+    
     // Listen on data, write it to the terminal
     socket.onmessage = ({data}) => {
       xterm.write(data)
@@ -41,7 +45,7 @@ AFRAME.registerComponent('xterm-example', {
     radius="6"
     height="4"
     rotation="0 150 0"
-    position="0 2 -2"
+    position="0 1 -0.2"
   ></a-curvedimage>
 
   <a-entity wasd-controls>
@@ -51,13 +55,8 @@ AFRAME.registerComponent('xterm-example', {
       position="0 1.6 0"
     ></a-entity>
     <a-entity
-      cursor="rayOrigin: mouse"
-      raycaster="objects: .terminal"
-    ></a-entity>
-    <a-entity
-      hand-controls
       laser-controls
       raycaster="objects: .terminal"
     ></a-entity>
-  </a-entity>
+  </a-entity
 </a-scene>
